@@ -1,24 +1,40 @@
 import logo from './logo.svg';
 import './App.css';
-
+import Mainsection from './page/Mainsection';
+import { Provider } from './context/NoteContext';
+import { useEffect, useState } from 'react';
+import MobileMainsection from './page/MobileMainsection';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import MobileNotesection from './component/PocketNote/MobileNotesection';
 function App() {
+  
+  const [screenSize, setScreenSize] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener("resize", checkScreen);
+  });
+  const checkScreen = () => {
+    setScreenSize(window.innerWidth);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider>
+      <Router>
+      {screenSize > 480 ? (
+      <div className="app">
+        <Mainsection />
+      </div>
+      ) :(
+        
+          <Routes>
+            <Route path="/" element={<MobileMainsection />} />
+            <Route path="/notes" element={<MobileNotesection />} />
+          </Routes>
+        
+      )
+        }
+        </Router>
+    </Provider>
   );
 }
 
